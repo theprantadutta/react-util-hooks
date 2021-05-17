@@ -1,0 +1,29 @@
+{
+  "name": "react-util-hooks",
+  "version": "0.2.1",
+  "description": "This Library Contains Some Useful Hooks For ReactJS",
+  "main": "dist/index.js",
+  "types": "dist",
+  "scripts": {
+    "build": "tsc -p ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/prantaDutta/react-util-hooks.git"
+  },
+  "bugs": {
+    "url": "https://github.com/prantaDutta/react-util-hooks.git/issues"
+  },
+  "homepage": "https://github.com/prantaDutta/react-util-hooks#readme",
+  "author": "PRANTA Dutta",
+  "license": "ISC",
+  "keywords": [
+    "react",
+    "reactJS",
+    "typescript",
+    "react-hooks",
+    "react-util-hooks"
+  ],
+  "devDependencies": {},
+  "dependencies": {}
+}
