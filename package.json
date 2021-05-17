@@ -1,6 +1,6 @@
 {
   "name": "react-util-hooks",
-  "version": "0.2.2",
+  "version": "0.3.2",
   "description": "This Library Contains Some Useful Hooks For ReactJS",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -9,7 +9,7 @@
   ],
   "scripts": {
     "build": "tsc -p .",
-    "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
+    "format": "prettier --write \"src/**/*.ts\" \"dist/**/*.ts\" \"dist/**/*.js\"",
     "lint": "tslint -p tsconfig.json"
   },
   "repository": {
