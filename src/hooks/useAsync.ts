@@ -17,8 +17,8 @@ export function useAsync<T, E = string>(asyncFunction: () => Promise<T>, immedia
         setValue(response)
         setStatus('success')
       })
-      .catch((error: any) => {
-        setError(error)
+      .catch((e: any) => {
+        setError(e)
         setStatus('error')
       })
   }, [asyncFunction])

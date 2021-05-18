@@ -8,12 +8,12 @@ export function useIntersectionObserver(
   elementRef: RefObject<Element>,
   { threshold = 0, root = null, rootMargin = '0%', freezeOnceVisible = false }: Args
 ): IntersectionObserverEntry | undefined {
-  const [entry, setEntry] = useState<IntersectionObserverEntry>()
+  const [entryState, setEntryState] = useState<IntersectionObserverEntry>()
 
-  const frozen = entry?.isIntersecting && freezeOnceVisible
+  const frozen = entryState?.isIntersecting && freezeOnceVisible
 
   const updateEntry = ([entry]: IntersectionObserverEntry[]): void => {
-    setEntry(entry)
+    setEntryState(entry)
   }
 
   useEffect(() => {
@@ -32,5 +32,5 @@ export function useIntersectionObserver(
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [elementRef, threshold, root, rootMargin, frozen])
 
-  return entry
+  return entryState
 }
