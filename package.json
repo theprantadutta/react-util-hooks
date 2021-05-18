@@ -1,6 +1,6 @@
 {
   "name": "react-util-hooks",
-  "version": "0.3.2",
+  "version": "0.5.0",
   "description": "This Library Contains Some Useful Hooks For ReactJS",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
