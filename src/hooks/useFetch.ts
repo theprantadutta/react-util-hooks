@@ -6,14 +6,14 @@ interface RequestProps<T> {
   processData?: (data: any) => T
 }
 
-export const useFetch = <T>({ url, init, processData }: RequestProps<T>) => {
+export default function useFetch<T>({ url, init, processData }: RequestProps<T>) {
   // Response state
   const [data, setData] = useState<T>()
   const [error, setError] = useState<Error | null>(Error)
   const [loading, setLoading] = useState(false)
 
   // Turn objects into strings for useCallback & useEffect dependencies
-  const [stringifiedUrl, stringifiedInit] = [JSON.stringify(url), JSON.stringify(init)]
+  const [stringifyUrl, stringifyInit] = [JSON.stringify(url), JSON.stringify(init)]
 
   // If no processing function is passed just cast the object to type T
   // The callback hook ensures that the function is only created once
@@ -45,7 +45,7 @@ export const useFetch = <T>({ url, init, processData }: RequestProps<T>) => {
     // Call async function
     fetchApi()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [stringifiedUrl, stringifiedInit, processJson])
+  }, [stringifyUrl, stringifyInit, processJson])
 
   return { data, loading, error }
 }

@@ -1,12 +1,12 @@
 import { RefObject, useCallback, useEffect, useState } from 'react'
-import { useEventListener } from './useEventListener'
+import { default as useEventListener } from './useEventListener'
 
 interface Size {
   width: number
   height: number
 }
 
-export function useElementSize<T extends HTMLElement = HTMLDivElement>(elementRef: RefObject<T>): Size {
+export default function useElementSize<T extends HTMLElement = HTMLDivElement>(elementRef: RefObject<T>): Size {
   const [size, setSize] = useState<Size>({
     width: 0,
     height: 0

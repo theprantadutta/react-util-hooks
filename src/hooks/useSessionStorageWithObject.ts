@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction } from 'react'
-import { useSessionStorage } from './useSessionStorage'
+import { default as useSessionStorage } from './useSessionStorage'
 
-export function useSessionStorageWithObject<T>(
+export default function useSessionStorageWithObject<T>(
   key: string,
   initialValue: T
 ): [T, Dispatch<SetStateAction<T>>, () => void] {

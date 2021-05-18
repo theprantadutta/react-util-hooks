@@ -4,7 +4,7 @@ interface Args extends IntersectionObserverInit {
   freezeOnceVisible?: boolean
 }
 
-export function useIntersectionObserver(
+export default function useIntersectionObserver(
   elementRef: RefObject<Element>,
   { threshold = 0, root = null, rootMargin = '0%', freezeOnceVisible = false }: Args
 ): IntersectionObserverEntry | undefined {

@@ -1,6 +1,6 @@
 import { RefObject, useEffect, useRef } from 'react'
 
-export function useEventListener<T extends HTMLElement = HTMLDivElement>(
+export default function useEventListener<T extends HTMLElement = HTMLDivElement>(
   eventName: keyof WindowEventMap,
   handler: (event: Event) => void,
   element?: RefObject<T>
