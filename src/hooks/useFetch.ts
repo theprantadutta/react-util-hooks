@@ -21,12 +21,14 @@ export default function useFetch<T>({ url, init, processData }: RequestProps<T>)
   const processJson = useCallback(processData || ((jsonBody: any) => jsonBody as T), [])
 
   useEffect(() => {
+    // Use AbortController API to make request abortable
+    const abortController = new AbortController()
     // Define asynchronous function
     const fetchApi = async () => {
       setLoading(true)
       try {
         // Fetch data from REST API
-        const response = await fetch(url, init)
+        const response = await fetch(url, { ...(init ?? {}), signal: abortController.signal })
 
         if (response.status === 200) {
           // Extract json
@@ -44,6 +46,9 @@ export default function useFetch<T>({ url, init, processData }: RequestProps<T>)
 
     // Call async function
     fetchApi()
+    
+    // Abort request on unmount
+    return () => abortController.abort()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [stringifyUrl, stringifyInit, processJson])
 
