@@ -20,9 +20,11 @@ your next project. Learn more from [react docs](https://reactjs.org/docs/hooks-o
 _Table of contents:_
 
 - [Installation](#installation) 💻
+- [Features](#features) 📋
 - [Hooks](#hooks) 🔗
 - [Usage](#usage) 🖨️
 - [Project Status](#project-status) ✔️
+- [Support Me](#support-me) 🙏
 - [🤓 References](#references) 🌐
 
 ## Installation 
@@ -32,6 +34,15 @@ npm add react-util-hooks
 // OR
 yarn add react-util-hooks
 ```
+
+## Features
+
+- Doesn't have any Dependency (Except for React)
+- Only 5 KB in Minified/GZIP
+- 100% Modular. Just Use the Hooks you need.
+- Detailed Documentation with Example
+- Written in Typescript
+- Most of the hooks are Generic
 
 ## Hooks
 
@@ -74,18 +85,19 @@ So you shouldn't do the following (remember you can, but you shouldn't):
     import * as ReactUtilHooks from 'react-util-hooks'
 ```
 
-Instead, you should only import the hook you need. Let's say, you only need useClient hook. Do the following
+Instead, you should only import the hook/hooks you need. Let's say, you only need useClient hook. Do the following
 
 ```js
     import {useIsClient} from 'react-util-hooks'
+    // OR
+    import {useIsClient, useFetch} from 'react-util-hooks'
 ```
 
-This way, you bundle size will be much smaller, and your app performance will be better. You can also do the not
+This way, your bundle size will be much smaller, and your app performance will be better. You can also do the not
 recommended way
 
 ```jsx
     import ReactUtilHooks from 'react-util-hooks'
-
     // Not Recommended
     function app() {
         const isClient = ReactUtilHooks.useIsClient()
@@ -827,6 +839,10 @@ I created this library because I needed it. Feel free to use it and give feedbac
 You can also create hooks and send PR, thanks.
 
 If you find any bugs or have new hook ideas, [create an issue](https://github.com/prantaDutta/react-util-hooks/issues).
+
+## Support Me
+
+Become a [Patreon](https://www.patreon.com/prantadutta) 🥰👋
 
 ## References
 
