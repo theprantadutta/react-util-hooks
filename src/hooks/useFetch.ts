@@ -46,7 +46,7 @@ export default function useFetch<T>({ url, init, processData }: RequestProps<T>)
 
     // Call async function
     fetchApi()
-    
+
     // Abort request on unmount
     return () => abortController.abort()
     // eslint-disable-next-line react-hooks/exhaustive-deps
