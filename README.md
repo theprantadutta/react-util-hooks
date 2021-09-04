@@ -47,6 +47,10 @@ yarn add react-util-hooks
 ## Hooks
 
 - [useAsync](#useasync)
+- [useBoolean](#useboolean)
+- [useCopyToClipboard](#usecopytoclipboard)
+- [useCounter](#usecounter)
+- [useDarkMode](#usedarkmode)
 - [useDebounce](#usedebounce)
 - [useElementSize](#useelementsize)
 - [useEventListener](#useeventlistener)
@@ -63,12 +67,14 @@ yarn add react-util-hooks
 - [useOnClickOutside](#useonclickoutside)
 - [useOnScreen](#useonscreen)
 - [usePrevious](#useprevious)
+- [useReadLocalStorage](#usereadlocalstorage)
 - [useScreen](#usescreen)
 - [useScript](#usescript)
 - [useTimeout](#usetimeout)
 - [useToggle](#usetoggle)
 - [useWindowSize](#usewindowsize)
 - [useSessionStorage](#usesessionstorage)
+- [useSsr](#usessr)
 - [useSessionStorageWithObject](#usesessionstoragewithobject)
 
 ## Usage
@@ -126,6 +132,97 @@ values we need to properly update our UI. Possible values for status prop are: "
                 </button>
             </div>
         );
+    }
+```
+
+### useBoolean
+
+A simple abstraction to play with a boolean, don't repeat yourself.
+
+```
+    export default function Component() {
+        const { value, setValue, setTrue, setFalse, toggle } = useBoolean(false)
+        
+        // Just an example to use "setValue"
+        const customToggle = () => setValue(x => !x)
+        
+        return (
+        <>
+          <p>
+            Value is <code>{value.toString()}</code>
+          </p>
+          <button onClick={setTrue}>set true</button>
+          <button onClick={setFalse}>set false</button>
+          <button onClick={toggle}>toggle</button>
+          <button onClick={customToggle}>custom toggle</button>
+        </>
+        )
+    }
+```
+
+### useCopyToClipboard
+
+This React hook gives you a copy method to save a string in the clipboard and the copied value (default: null).
+
+If anything doesn't work, it prints a warning in the console and the value will be null.
+
+```
+    export default function Component() {
+      const [value, copy] = useCopyToClipboard()
+      return (
+        <>
+          <h1>Click to copy:</h1>
+          <div style={{ display: 'flex' }}>
+            <button onClick={() => copy('A')}>A</button>
+            <button onClick={() => copy('B')}>B</button>
+            <button onClick={() => copy('C')}>C</button>
+          </div>
+          <p>Copied value: {value ?? 'Nothing is copied yet!'}</p>
+        </>
+      )
+    }
+```
+
+### useCounter
+
+A simple abstraction to play with a counter, don't repeat yourself.
+
+```
+    export default function Component() {
+      const { count, setCount, increment, decrement, reset } = useCounter(0)
+    
+      const multiplyBy2 = () => setCount(x => x * 2)
+    
+      return (
+        <>
+          <p>Count is {count}</p>
+          <button onClick={increment}>Increment</button>
+          <button onClick={decrement}>Decrement</button>
+          <button onClick={reset}>Reset</button>
+          <button onClick={multiplyBy2}>Multiply by 2</button>
+        </>
+      )
+    }
+```
+
+### useDarkMode
+
+This React Hook offers you an interface to enable, disable, toggle and read the dark theme mode. The returned value (isDarkMode) is a boolean to let you be able to use with your logic.
+
+It uses internally useLocalStorage() to persist the value and listens the OS color scheme preferences.
+
+```
+    export default function Component() {
+      const { isDarkMode, toggle, enable, disable } = useDarkMode()
+    
+      return (
+        <div>
+          <p>Current theme: {isDarkMode ? 'dark' : 'light'}</p>
+          <button onClick={toggle}>Toggle</button>
+          <button onClick={enable}>Enable</button>
+          <button onClick={disable}>Disable</button>
+        </div>
+      )
     }
 ```
 
@@ -218,8 +315,15 @@ and ```window``` based event.
 
 ### useFetch
 
-This hook uses fetch to fetch some data from an external api providing you with a loading, and an error state
-> Please remember, this hook takes an object as a parameter
+Here is a React Hook which aims to retrieve data on an API using the native Fetch API.
+I used a reducer to separate state logic and simplify testing via functional style.
+The received data is saved (cached) in the application via useRef, but you can use LocalStorage 
+[(see useLocalStorage())](uselocalstorage) or a caching solution to persist the data. The fetch is executed when 
+the component is mounted and if the url changes. If ever the url is undefined, or if the component is unmounted 
+before the data is recovered, the fetch will not be called. This hook also takes the request config 
+as a second parameter in order to be able to pass the authorization token in the header of the request,
+for example. Be careful though, the latter does not trigger a re-rendering in case of modification, 
+go through the url params to dynamically change the request.
 
 ```jsx
     export const DogImage: FC = () => {
@@ -660,6 +764,24 @@ official [React Hooks FAQ](https://reactjs.org/docs/hooks-faq.html#how-to-get-th
     }
 ```
 
+### useReadLocalStorage
+
+This React Hook allows you to read a value from localStorage by its key. 
+It can be useful if you just want to read without passing a default value. 
+If the window object is not present (as in SSR), or if the value doesn't exist,
+useLocalStorage() will return null.
+
+```
+    export default function Component() {
+      // Assuming a value was set in localStorage with this key
+      const darkMode = useReadLocalStorage('darkMode')
+    
+      return <p>DarkMode is {darkMode ? 'enabled' : 'disabled'}</p>
+    }
+```
+
+Note: If you want to be able to change the value, look [useLocalStorage()](uselocalstorage)
+
 ### useScreen
 
 Easily retrieve window.screen object with this Hook React which also works onRezise.
@@ -795,6 +917,27 @@ number or disabling it using null. When the time finish, the callback function c
                 </p>
             </div>
         )
+    }
+```
+
+### useSsr
+
+Quickly know where your code will be executed;
+
+- In the server (Server-Side-Rendering) or
+- In the client, the navigator
+
+This hook doesn't cause an extra render, it just returns the value directly, at the mount time, 
+and it didn't re-trigger if the value changes.
+
+Otherwise, If you want to be notified when the value changes to react to it, 
+you can use [useIsClient()](useisclient) instead.
+
+```
+    export default function Component() {
+      const { isBrowser } = useSsr()
+    
+      return <p>{isBrowser ? 'Browser' : 'Server'}!</p>
     }
 ```
 

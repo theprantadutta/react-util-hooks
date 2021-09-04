@@ -1,56 +1,82 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useReducer, useRef } from 'react'
 
-interface RequestProps<T> {
-  url: RequestInfo
-  init?: RequestInit
-  processData?: (data: any) => T
+interface State<T> {
+  data?: T
+  error?: Error
 }
 
-export default function useFetch<T>({ url, init, processData }: RequestProps<T>) {
-  // Response state
-  const [data, setData] = useState<T>()
-  const [error, setError] = useState<Error | null>(Error)
-  const [loading, setLoading] = useState(false)
+type Cache<T> = { [url: string]: T }
 
-  // Turn objects into strings for useCallback & useEffect dependencies
-  const [stringifyUrl, stringifyInit] = [JSON.stringify(url), JSON.stringify(init)]
+// discriminated union type
+type Action<T> = { type: 'loading' } | { type: 'fetched'; payload: T } | { type: 'error'; payload: Error }
 
-  // If no processing function is passed just cast the object to type T
-  // The callback hook ensures that the function is only created once
-  // and hence the effect hook below doesn't start an infinite loop
-  const processJson = useCallback(processData || ((jsonBody: any) => jsonBody as T), [])
+export function useFetch<T = unknown>(url?: string, options?: RequestInit): State<T> {
+  const cache = useRef<Cache<T>>({})
+
+  // Used to prevent state update if the component is unmounted
+  const cancelRequest = useRef<boolean>(false)
+
+  const initialState: State<T> = {
+    error: undefined,
+    data: undefined
+  }
+
+  // Keep state logic separated
+  const fetchReducer = (state: State<T>, action: Action<T>): State<T> => {
+    switch (action.type) {
+      case 'loading':
+        return { ...initialState }
+      case 'fetched':
+        return { ...initialState, data: action.payload }
+      case 'error':
+        return { ...initialState, error: action.payload }
+      default:
+        return state
+    }
+  }
+
+  const [currentState, dispatch] = useReducer(fetchReducer, initialState)
 
   useEffect(() => {
-    // Use AbortController API to make request abortable
-    const abortController = new AbortController()
-    // Define asynchronous function
-    const fetchApi = async () => {
-      setLoading(true)
-      try {
-        // Fetch data from REST API
-        const response = await fetch(url, { ...(init ?? {}), signal: abortController.signal })
+    // Do nothing if the url is not given
+    if (!url) return
 
-        if (response.status === 200) {
-          // Extract json
-          const rawData: any = await response.json()
-          const processedData = processJson(rawData)
-          setData(processedData)
-        } else {
-          throw Error(`Error ${response.status} ${response.statusText}`)
-        }
-      } catch (error) {
-        setError(error)
+    const fetchData = async () => {
+      dispatch({ type: 'loading' })
+
+      // If a cache exists for this url, return it
+      if (cache.current[url]) {
+        dispatch({ type: 'fetched', payload: cache.current[url] })
+        return
       }
-      setLoading(false)
+
+      try {
+        const response = await fetch(url, options)
+        if (!response.ok) {
+          throw new Error(response.statusText)
+        }
+
+        const data = (await response.json()) as T
+        cache.current[url] = data
+        if (cancelRequest.current) return
+
+        dispatch({ type: 'fetched', payload: data })
+      } catch (error) {
+        if (cancelRequest.current) return
+
+        dispatch({ type: 'error', payload: error as Error })
+      }
     }
 
-    // Call async function
-    fetchApi()
+    void fetchData()
 
-    // Abort request on unmount
-    return () => abortController.abort()
+    // Use the cleanup function for avoiding a possibly...
+    // ...state update after the component was unmounted
+    return () => {
+      cancelRequest.current = true
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [stringifyUrl, stringifyInit, processJson])
+  }, [url])
 
-  return { data, loading, error }
+  return currentState
 }

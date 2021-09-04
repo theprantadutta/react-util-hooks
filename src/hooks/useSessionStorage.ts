@@ -1,6 +1,6 @@
 import React, { Dispatch, SetStateAction } from 'react'
 
-export default function useSessionStorage(
+export function useSessionStorage(
   key: string,
   initialValue: string = ''
 ): [string, Dispatch<SetStateAction<string>>, () => void] {

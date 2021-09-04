@@ -2,7 +2,7 @@ import { useEffect, useLayoutEffect, useState } from 'react'
 
 type ReturnType = [boolean, (locked: boolean) => void]
 
-export default function useLockedBody(initialLocked = false): ReturnType {
+export function useLockedBody(initialLocked = false): ReturnType {
   const [locked, setLocked] = useState(initialLocked)
 
   // Do the side effect before render

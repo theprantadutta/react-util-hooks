@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-export default function useScreen() {
+export function useScreen() {
   const getScreen = () => {
     if (typeof window !== 'undefined') {
       return window.screen

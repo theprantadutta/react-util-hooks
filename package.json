@@ -4,6 +4,7 @@
   "description": "This Library Contains Some Useful Hooks For ReactJS",
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
+  "type": "module",
   "types": "dist/types",
   "files": [
     "dist/**/*"
@@ -36,7 +37,6 @@
     "tslint": "^6.1.3",
     "tslint-config-prettier": "^1.18.0",
     "typescript": "^4.2.4",
-    "@rollup/plugin-commonjs": "11.0.2",
     "@rollup/plugin-node-resolve": "7.1.1",
     "rollup": "1.31.0",
     "rollup-plugin-typescript2": "0.25.3"
