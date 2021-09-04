@@ -36,8 +36,7 @@ jobs:
     
   publish: 
     runs-on: ubuntu-latest
-    if: ${{ github.ref == 'refs/head/main' }}
-    needs: [quality]
+    if: github.ref == 'refs/heads/main' && needs.quality.result == 'success'
     steps:
     - uses: actions/checkout@v2
     
