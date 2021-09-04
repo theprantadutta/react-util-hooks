@@ -13,6 +13,7 @@
     "build": "rollup -c rollup.config.ts",
     "format": "prettier --write \"src/**/*.ts\" \"dist/**/*.ts\" \"dist/**/*.js\"",
     "lint": "tslint -p tsconfig.json",
+    "test": "echo \"No test specified\"",
     "commit": "git add . && cz",
     "semantic-release": "semantic-release --branches main"
   },
