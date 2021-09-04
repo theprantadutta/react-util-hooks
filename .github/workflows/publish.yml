@@ -28,11 +28,9 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-        path: ~/.npm
-        key: ${{ runner.OS }}-npm-cache-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.OS }}-npm-cache-
           
-    - run: yarn
-    - run: yarn lint
+    - run: npm ci
+    - run: npm run lint
+    - run: npm test --if-present
+    - run: npm build
     
